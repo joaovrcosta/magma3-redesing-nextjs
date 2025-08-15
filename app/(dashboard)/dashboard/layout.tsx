@@ -1,9 +1,6 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import {
-  Sidebar,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import Header from "@/components/header";
+import AppSidebar from "@/components/sidebar";
+import Tabs from "@/components/tabs";
 
 export default async function DashboardLayout({
   children,
@@ -11,12 +8,15 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <div className="flex h-screen">
       <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        {children}
+
+      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+        <Header />
+        <Tabs />
+
+        <div className="flex-1 overflow-auto p-10">{children}</div>
       </main>
-    </SidebarProvider>
+    </div>
   );
 }
