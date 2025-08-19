@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 
 const Header = () => {
   return (
-    <header className="bg-white w-full flex justify-center items-center px-6 py-[10px] border-b border-gray-200">
+    <header className="bg-white w-full flex justify-center items-center px-6 py-[10px]">
       <div className="flex gap-2">
         <Button
           variant="gradient"

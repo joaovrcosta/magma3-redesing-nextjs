@@ -1,39 +1,229 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useSidebarStore from "@/stores/sidebarStore";
 import Link from "next/link";
 import { AlignBottomIcon } from "@phosphor-icons/react";
-import { Menu } from "lucide-react";
+import {
+  Menu,
+  ChevronDown,
+  ChevronRight,
+  Check,
+  Key,
+  Vote,
+  CircleX,
+  Brain,
+  FilePen,
+} from "lucide-react";
 import Image from "next/image";
 import magmaLogo from "@/public/logo-extended.png";
 import tinyLogo from "@/public/tiny-logo.png";
+import { useEffect, useState } from "react";
+import {
+  Cloud,
+  CurrencyEth,
+  Desktop,
+  Mountains,
+} from "@phosphor-icons/react/dist/ssr";
 
-const links = [
+<Cloud />;
+
+type SidebarLink = {
+  name: string;
+  path: string;
+  icon?: React.ElementType;
+  children?: SidebarLink[];
+};
+
+const links: SidebarLink[] = [
   { name: "Estatisticas", path: "/dashboard", icon: AlignBottomIcon },
-  { name: "Force1", path: "/dashboard/force1", icon: AlignBottomIcon },
-  { name: "Alaska", path: "/dashboard/bluesky", icon: AlignBottomIcon },
-  { name: "Crystal", path: "/dashboard/crystal", icon: AlignBottomIcon },
-  { name: "Bluesky", path: "/dashboard/alaska", icon: AlignBottomIcon },
+  {
+    name: "Force1",
+    path: "/dashboard/force1",
+    icon: Desktop,
+    children: [
+      { name: "Ativos", path: "/dashboard/force1/ativos", icon: Desktop },
+      {
+        name: "Licenças de Software",
+        path: "/dashboard/force1/overview",
+        icon: Key,
+      },
+      {
+        name: "Politicas",
+        path: "/dashboard/force1/reports",
+        icon: Vote,
+        children: [
+          {
+            name: "Politica Conforme",
+            path: "/dashboard/force1/politicas/politica-conforme",
+            icon: Check,
+          },
+        ],
+      },
+      {
+        name: "Politicas Inconformes",
+        path: "/dashboard/force1/politicas-inconformes",
+        icon: CircleX,
+      },
+      {
+        name: "Bussines Inteligence",
+        path: "/dashboard/force1/business-inteligence",
+        icon: Brain,
+      },
+      { name: "Cadastros", path: "/dashboard/force1/cadastros", icon: FilePen },
+    ],
+  },
+  {
+    name: "Alaska",
+    path: "/dashboard/alaska",
+    icon: Mountains,
+    children: [
+      { name: "Resumo", path: "/dashboard/alaska/summary" },
+      { name: "Configurações", path: "/dashboard/alaska/settings" },
+    ],
+  },
+  { name: "Crystal", path: "/dashboard/crystal", icon: CurrencyEth },
+  { name: "Bluesky", path: "/dashboard/bluesky", icon: Cloud },
 ];
+
+const SidebarItem = ({
+  link,
+  isOpen,
+  pathName,
+  openSubmenus,
+  toggleSubmenu,
+  router,
+  level = 0,
+}: {
+  link: SidebarLink;
+  isOpen: boolean;
+  pathName: string;
+  openSubmenus: string[];
+  toggleSubmenu: (name: string) => void;
+  router: any;
+  level?: number;
+}) => {
+  const hasChildren = !!link.children?.length;
+  const isActive =
+    link.path === "/dashboard"
+      ? pathName === "/dashboard"
+      : pathName.startsWith(link.path);
+
+  const isSubmenuOpen = openSubmenus.includes(link.name);
+
+  return (
+    <li key={link.path}>
+      <div
+        onClick={() => {
+          if (hasChildren) {
+            toggleSubmenu(link.name);
+          } else {
+            router.push(link.path);
+          }
+        }}
+        className={`relative flex items-center h-[44px] transition-colors cursor-pointer
+          ${isOpen ? "px-6" : "px-0"}
+          ${
+            isActive
+              ? level === 0
+                ? "bg-gradient-to-r from-purple-600 to-[#F0553D] text-white rounded-r-full" // só itens de topo recebem bg
+                : "text-purple-600 font-medium" // filhos ativos só ficam roxos
+              : "text-[#0A2540] hover:bg-[#f1f1f1] rounded-r-full"
+          }`}
+        style={{ paddingLeft: `${isOpen ? level * 16 + 24 : 0}px` }}
+      >
+        <div
+          className={`flex w-full items-center ${
+            isOpen ? "justify-between" : "justify-center"
+          }`}
+        >
+          <div className="flex items-center gap-3">
+            {link.icon && (
+              <link.icon
+                size={22}
+                className="text-current" // <- ícone herda a cor do texto
+                weight={isActive ? "fill" : "regular"}
+              />
+            )}
+            {isOpen && <span>{link.name}</span>}
+          </div>
+          {isOpen && hasChildren && (
+            <>
+              {isSubmenuOpen ? (
+                <ChevronDown size={16} />
+              ) : (
+                <ChevronRight size={16} />
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      {hasChildren && isSubmenuOpen && (
+        <ul className="mt-2 space-y-2">
+          {link.children?.map((child) => (
+            <SidebarItem
+              key={child.path}
+              link={child}
+              isOpen={isOpen}
+              pathName={pathName}
+              openSubmenus={openSubmenus}
+              toggleSubmenu={toggleSubmenu}
+              router={router}
+              level={level + 1}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+};
 
 const AppSidebar = () => {
   const pathName = usePathname();
+  const router = useRouter();
   const { isOpen, toggleSidebar } = useSidebarStore();
+  const [openSubmenus, setOpenSubmenus] = useState<string[]>([]);
+
+  const toggleSubmenu = (name: string) => {
+    setOpenSubmenus((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
+  };
+
+  // Fecha todos os submenus quando o sidebar for fechado
+  useEffect(() => {
+    if (!isOpen) setOpenSubmenus([]);
+  }, [isOpen]);
+
+  // Abre automaticamente submenu se a rota estiver dentro dele
+  useEffect(() => {
+    links.forEach((link) => {
+      if (
+        link.path !== "/dashboard" &&
+        link.children?.some((child) => pathName.startsWith(child.path))
+      ) {
+        setOpenSubmenus((prev) =>
+          prev.includes(link.name) ? prev : [...prev, link.name]
+        );
+      }
+    });
+  }, [pathName]);
 
   return (
     <section
       className={`flex h-screen flex-col gap-2 bg-[#fff] text-[#0A2540] py-4 transition-all duration-300 ease-in-out border-r ${
-        isOpen ? "w-64" : "w-16"
+        isOpen ? "w-72" : "w-16"
       }`}
     >
       <div className="flex-1">
+        {/* Logo e botão */}
         <div
           className={`flex ${
             isOpen
               ? "items-start justify-start pl-[24px]"
               : "items-center justify-center"
-          }  mb-6 flex-col gap-4`}
+          } mb-6 flex-col gap-4`}
         >
           <Image
             src={magmaLogo}
@@ -56,49 +246,20 @@ const AppSidebar = () => {
           </button>
         </div>
 
-        <nav className="w-full max-h-[308px] bg-transparent py-4 px-0 rounded-lg border-none">
+        {/* Menu */}
+        <nav className="w-full bg-transparent py-4 px-0 rounded-lg border-none">
           <ul className={`space-y-2 ${isOpen ? "px-0 pr-4" : "px-[10px]"}`}>
-            {links.map((link) => {
-              const isActive = pathName === link.path;
-              return (
-                <li key={link.path}>
-                  <Link
-                    href={link.path}
-                    className={`relative flex items-center justify-center h-[44px] transition-colors ${
-                      isOpen ? "px-6" : "px-0"
-                    } overflow-hidden
-                      ${
-                        isActive
-                          ? isOpen
-                            ? "bg-gradient-to-r from-purple-600 to-[#F0553D] text-white rounded-r-full "
-                            : "bg-gradient-to-r from-purple-600 to-[#F0553D] text-white rounded-full"
-                          : "text-[#0A2540] hover:bg-[#f1f1f1] rounded-r-full"
-                      }`}
-                  >
-                    <div
-                      className={`flex items-center justify-between ${
-                        isOpen ? "w-full" : ""
-                      }`}
-                    >
-                      <div className="flex items-center justify-center">
-                        <link.icon
-                          size={28}
-                          className={`${
-                            isActive ? "text-white" : "text-[#68569E]"
-                          }`}
-                          weight={isActive ? "fill" : "regular"}
-                        />
-                        {isOpen && (
-                          <span className="ml-3 whitespace-nowrap">
-                            {link.name}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
+            {links.map((link) => (
+              <SidebarItem
+                key={link.path}
+                link={link}
+                isOpen={isOpen}
+                pathName={pathName}
+                openSubmenus={openSubmenus}
+                toggleSubmenu={toggleSubmenu}
+                router={router}
+              />
+            ))}
           </ul>
         </nav>
       </div>

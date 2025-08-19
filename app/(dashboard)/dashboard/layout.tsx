@@ -11,11 +11,16 @@ export default async function DashboardLayout({
     <div className="flex h-screen">
       <AppSidebar />
 
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden">
         <Header />
-        <Tabs />
 
-        <div className="flex-1 overflow-auto p-10">{children}</div>
+        {/* Wrapper flexível abaixo do header */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <Tabs />
+
+          {/* Área de conteúdo com scroll */}
+          <div className="flex-1 overflow-auto p-5">{children}</div>
+        </div>
       </main>
     </div>
   );
