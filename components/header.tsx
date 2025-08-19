@@ -7,11 +7,12 @@ import {
   WandSparkles,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { DropdownAvatar } from "./dropdown-avatar";
 
 const Header = () => {
   return (
-    <header className="bg-white w-full flex justify-center items-center px-6 py-[10px]">
-      <div className="flex gap-2">
+    <header className="bg-white w-full flex justify-between items-center px-6 py-[10px]">
+      <div className="flex gap-2 w-full items-center justify-center">
         <Button
           variant="gradient"
           className=" flex items-center justify-center border border-[#E5E7EB] px-4 rounded-full h-[44px]"
@@ -54,6 +55,9 @@ const Header = () => {
           <Flame className="text-[#68569E]" />
           Atualizações
         </Button>
+      </div>
+      <div>
+        <DropdownAvatar />
       </div>
     </header>
   );
