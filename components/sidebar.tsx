@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import useSidebarStore from "@/stores/sidebarStore";
-import Link from "next/link";
 import { AlignBottomIcon } from "@phosphor-icons/react";
 import {
   Menu,
@@ -25,8 +24,6 @@ import {
   Desktop,
   Mountains,
 } from "@phosphor-icons/react/dist/ssr";
-
-<Cloud />;
 
 type SidebarLink = {
   name: string;
@@ -86,23 +83,24 @@ const links: SidebarLink[] = [
   { name: "Bluesky", path: "/dashboard/bluesky", icon: Cloud },
 ];
 
+interface SidebarItemProps {
+  link: SidebarLink;
+  isOpen: boolean;
+  pathName: string;
+  openSubmenus: string[];
+  toggleSubmenu: (name: string) => void;
+  level?: number;
+}
+
 const SidebarItem = ({
   link,
   isOpen,
   pathName,
   openSubmenus,
   toggleSubmenu,
-  router,
   level = 0,
-}: {
-  link: SidebarLink;
-  isOpen: boolean;
-  pathName: string;
-  openSubmenus: string[];
-  toggleSubmenu: (name: string) => void;
-  router: any;
-  level?: number;
-}) => {
+}: SidebarItemProps) => {
+  const router = useRouter();
   const hasChildren = !!link.children?.length;
   const isActive =
     link.path === "/dashboard"
@@ -126,8 +124,8 @@ const SidebarItem = ({
           ${
             isActive
               ? level === 0
-                ? "bg-gradient-to-r from-purple-600 to-[#F0553D] text-white rounded-r-full" // só itens de topo recebem bg
-                : "text-purple-600 font-medium" // filhos ativos só ficam roxos
+                ? "bg-gradient-to-r from-purple-600 to-[#F0553D] text-white rounded-r-full"
+                : "text-purple-600 font-medium"
               : "text-[#0A2540] hover:bg-[#f1f1f1] rounded-r-full"
           }`}
         style={{ paddingLeft: `${isOpen ? level * 16 + 24 : 0}px` }}
@@ -141,7 +139,7 @@ const SidebarItem = ({
             {link.icon && (
               <link.icon
                 size={22}
-                className="text-current" // <- ícone herda a cor do texto
+                className="text-current"
                 weight={isActive ? "fill" : "regular"}
               />
             )}
@@ -169,7 +167,6 @@ const SidebarItem = ({
               pathName={pathName}
               openSubmenus={openSubmenus}
               toggleSubmenu={toggleSubmenu}
-              router={router}
               level={level + 1}
             />
           ))}
@@ -181,7 +178,6 @@ const SidebarItem = ({
 
 const AppSidebar = () => {
   const pathName = usePathname();
-  const router = useRouter();
   const { isOpen, toggleSidebar } = useSidebarStore();
   const [openSubmenus, setOpenSubmenus] = useState<string[]>([]);
 
@@ -191,12 +187,10 @@ const AppSidebar = () => {
     );
   };
 
-  // Fecha todos os submenus quando o sidebar for fechado
   useEffect(() => {
     if (!isOpen) setOpenSubmenus([]);
   }, [isOpen]);
 
-  // Abre automaticamente submenu se a rota estiver dentro dele
   useEffect(() => {
     links.forEach((link) => {
       if (
@@ -257,7 +251,6 @@ const AppSidebar = () => {
                 pathName={pathName}
                 openSubmenus={openSubmenus}
                 toggleSubmenu={toggleSubmenu}
-                router={router}
               />
             ))}
           </ul>
