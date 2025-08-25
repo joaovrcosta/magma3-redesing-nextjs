@@ -1,5 +1,6 @@
 // Tipagem
 export interface BemPatrimonial {
+  id: number;
   status?: boolean;
   bemPatrimonial: string;
   numeroDeSerie: string;
@@ -7,17 +8,18 @@ export interface BemPatrimonial {
   subtipo: string;
   ativosAssociados: string[];
   lastUserLogged: string;
-  lastManutencion: string; // formato ISO (ex: "2025-06-10")
+  lastManutencion: string;
   instalado: boolean;
   version: string;
-  lastCommunication: string; // ex: "2025-08-18 14:22"
+  lastCommunication: string;
   unidadeAdministrativa: string;
-  nome: string; // logradouro
+  nome: string;
 }
 
 // Dados
 export const ativos: BemPatrimonial[] = [
   {
+    id: 1,
     status: true,
     bemPatrimonial: "BP-001",
     numeroDeSerie: "SN-AX12345",
@@ -33,6 +35,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Av. Paulista, 1000",
   },
   {
+    id: 2,
     bemPatrimonial: "BP-002",
     numeroDeSerie: "SN-AX12346",
     tags: ["TI", "Backup"],
@@ -47,6 +50,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua das Flores, 320",
   },
   {
+    id: 3,
     bemPatrimonial: "BP-003",
     numeroDeSerie: "SN-AX12347",
     tags: ["Impressora", "Colorida"],
@@ -61,6 +65,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua Verde, 50",
   },
   {
+    id: 4,
     bemPatrimonial: "BP-004",
     numeroDeSerie: "SN-AX12348",
     tags: ["Notebook", "RH"],
@@ -75,6 +80,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua do Sol, 777",
   },
   {
+    id: 5,
     bemPatrimonial: "BP-005",
     numeroDeSerie: "SN-AX12349",
     tags: ["Monitor", "TI"],
@@ -89,6 +95,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Av. Industrial, 99",
   },
   {
+    id: 6,
     bemPatrimonial: "BP-006",
     numeroDeSerie: "SN-AX12350",
     tags: ["Scanner", "Documentos"],
@@ -103,6 +110,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua Central, 400",
   },
   {
+    id: 7,
     bemPatrimonial: "BP-007",
     numeroDeSerie: "SN-AX12351",
     tags: ["Projetor", "Sala de Reunião"],
@@ -117,6 +125,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua das Palmeiras, 150",
   },
   {
+    id: 8,
     bemPatrimonial: "BP-008",
     numeroDeSerie: "SN-AX12352",
     tags: ["Switch", "Rede"],
@@ -131,6 +140,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Av. Tecnológica, 88",
   },
   {
+    id: 9,
     bemPatrimonial: "BP-001",
     numeroDeSerie: "SN-AX12345",
     tags: ["TI", "Servidor"],
@@ -145,6 +155,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Av. Paulista, 1000",
   },
   {
+    id: 10,
     bemPatrimonial: "BP-002",
     numeroDeSerie: "SN-AX12346",
     tags: ["TI", "Backup"],
@@ -159,6 +170,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua das Flores, 320",
   },
   {
+    id: 11,
     bemPatrimonial: "BP-003",
     numeroDeSerie: "SN-AX12347",
     tags: ["Impressora", "Colorida"],
@@ -173,6 +185,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua Verde, 50",
   },
   {
+    id: 12,
     bemPatrimonial: "BP-004",
     numeroDeSerie: "SN-AX12348",
     tags: ["Notebook", "RH"],
@@ -187,6 +200,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua do Sol, 777",
   },
   {
+    id: 13,
     bemPatrimonial: "BP-005",
     numeroDeSerie: "SN-AX12349",
     tags: ["Monitor", "TI"],
@@ -201,6 +215,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Av. Industrial, 99",
   },
   {
+    id: 14,
     bemPatrimonial: "BP-006",
     numeroDeSerie: "SN-AX12350",
     tags: ["Scanner", "Documentos"],
@@ -215,6 +230,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua Central, 400",
   },
   {
+    id: 15,
     bemPatrimonial: "BP-007",
     numeroDeSerie: "SN-AX12351",
     tags: ["Projetor", "Sala de Reunião"],
@@ -229,6 +245,7 @@ export const ativos: BemPatrimonial[] = [
     nome: "Rua das Palmeiras, 150",
   },
   {
+    id: 16,
     bemPatrimonial: "BP-008",
     numeroDeSerie: "SN-AX12352",
     tags: ["Switch", "Rede"],

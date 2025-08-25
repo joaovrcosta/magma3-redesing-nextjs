@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TableHeading } from "./table-heading";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -27,6 +28,8 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+
   const table = useReactTable({
     data,
     columns,
@@ -66,7 +69,14 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  onDoubleClick={() => {
+                    const id = row.original.id;
+                    router.push(`/ativo/${id}`);
+                  }}
+                  className="cursor-pointer"
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
