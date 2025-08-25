@@ -1,5 +1,3 @@
-import { AtivoSidebar } from "@/components/ativo/sidebar";
-
 export default async function AtivoLayout({
   children,
 }: {
@@ -9,7 +7,7 @@ export default async function AtivoLayout({
     <div className="flex h-screen">
       <main className="flex-1 flex flex-col overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="">{children}</div>
+          <div className="h-full bg-[#ebedf4]">{children}</div>
         </div>
       </main>
     </div>

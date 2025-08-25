@@ -64,7 +64,7 @@
   --muted: oklch(0.95 0.01 270); /* cinza claro (#E5E7EB) */
   --muted-foreground: oklch(0.55 0.02 270);
 
-  --accent: oklch(0.56 0.29 302.31); /* Azul (#4C6FFF) */
+  --accent: oklch(0.53 0.19 285.29) /* Azul (#4C6FFF) */
   --accent-foreground: oklch(0.98 0.01 270);
 
   --destructive: oklch(0.62 0.22 30); /* Vermelho escuro (#DC2626) */
